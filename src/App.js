@@ -1,25 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import Discovery from './components/Discovery';
+import DataFlow from './components/DataFlow';
+// uncomment for the state-only option
+// import DataFlow from './components/DataFlow1';
+import schema from './config/schema';
+
+const isDiscovery = window.location.pathname.replace(/\//g, '') === 'discovery';
+
+let data = JSON.parse(localStorage.getItem('data'));
+
+// default example data, read from the schema
+if (!data) {
+  data = [{}];
+  Object.keys(schema).forEach((key) => (data[0][key] = schema[key].samples[0]));
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  if (isDiscovery) {
+    return <Discovery />;
+  }
+  return <DataFlow schema={schema} initialData={data} />;
 }
 
 export default App;
